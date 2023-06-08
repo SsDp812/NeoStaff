@@ -1,4 +1,5 @@
 *.iml
+application.properties
 
 .idea
 
