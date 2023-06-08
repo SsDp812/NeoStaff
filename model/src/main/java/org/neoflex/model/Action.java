@@ -33,9 +33,6 @@ public class Action {
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "interval")
-    private Period interval;
-
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 }

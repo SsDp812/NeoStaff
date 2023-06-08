@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CollectionId;
 
+import java.time.Period;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,9 @@ public class ActionType {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "interval")
+    private Period interval;
 
     @Column(name = "is_notify")
     private Boolean isNotify;
