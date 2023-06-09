@@ -6,8 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
-@Configuration
 @ComponentScan("org.neoflex.repository")
-@EnableJpaRepositories
+@EnableJpaRepositories("org.neoflex")
 public class RepositoryConfig {
 }
