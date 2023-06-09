@@ -1,15 +1,15 @@
 package org.neoflex.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -20,7 +20,7 @@ public class UserInfo {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
@@ -39,4 +39,5 @@ public class UserInfo {
 
     @OneToMany(mappedBy = "userInfo")
     private List<Action> actions;
+
 }
