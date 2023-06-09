@@ -14,6 +14,7 @@ import java.util.Random;
 @Service
 public class JiraIntegration {
 
+
     public static void main(String[] args) throws UnirestException {
         JiraIntegration.getAllJiraUsers();
     }
@@ -45,7 +46,7 @@ public class JiraIntegration {
 
             System.out.println(userInfo);
 
-            user.setPassword(JiraIntegration.genPassword());
+
 
 
 
@@ -61,9 +62,6 @@ public class JiraIntegration {
     }
 
 
-//    private JiraUserDTO jiraUserMapper(Object jiraUser){
-//        return ''
-//    }
 }
 
 
