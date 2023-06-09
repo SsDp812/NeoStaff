@@ -1,15 +1,15 @@
 package org.neoflex.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -23,6 +23,9 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "jira_account_id")
+    private String jiraAccountId;
 
     @OneToOne(mappedBy = "user")
     private UserInfo userInfo;
