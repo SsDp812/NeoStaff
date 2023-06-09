@@ -1,12 +1,12 @@
 package org.neoflex.dto.request.action_type;
 
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
-import java.time.Period;
+import java.time.Duration;
 
 @Data
 public class CreateActionTypeDto {
@@ -14,6 +14,6 @@ public class CreateActionTypeDto {
     @Size(max = 30, message = "Action type name should not be more than 30 symbols")
     private String actionTypeName;
     @Positive
-    private Period interval;
+    private Duration interval;
     private Boolean isNotify;
 }

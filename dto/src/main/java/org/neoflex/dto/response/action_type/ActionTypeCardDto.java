@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.Duration;
 import java.time.Period;
 
 @Data
@@ -16,7 +17,7 @@ public class ActionTypeCardDto {
 
     private String actionName;
 
-    private Period interval;
+    private Duration interval;
 
     private Boolean isNotify;
 }

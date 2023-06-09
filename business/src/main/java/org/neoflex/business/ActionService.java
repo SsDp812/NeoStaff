@@ -11,8 +11,11 @@ import org.neoflex.dto.request.user.DeleteActionToUserDto;
 import org.neoflex.dto.request.user.UpdateActionTimeToUserDto;
 import org.neoflex.dto.response.action.ActionCardDto;
 import org.neoflex.model.Action;
+import org.neoflex.model.ActionType;
 import org.neoflex.model.User;
 import org.neoflex.repository.ActionRepository;
+import org.neoflex.repository.ActionTypeRepository;
+import org.neoflex.repository.UserInfoRepository;
 import org.neoflex.repository.UserRepository;
 import org.neoflex.repository.specification.ActionSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -29,12 +33,13 @@ import java.util.Optional;
 @Service
 public class ActionService {
     private final ActionRepository actionRepository;
+
     private final UserRepository userRepository;
 
     private final NotificationService notificationService;
 
-    @Value("${action.minutesBeforeNotification}")
-    private long minutesBeforeNotification;
+    @Value("${action.daysBeforeNotification}")
+    private long daysBeforeNotification;
 
     @Autowired
     public ActionService(ActionRepository actionRepository, UserRepository userRepository, NotificationService notificationService) {
@@ -127,17 +132,22 @@ public class ActionService {
     @Scheduled(cron = "${action.repeat.cron}")
     @Transactional
     public void repeatActions() {
-        List<Action> repeatableActions = actionRepository.findAll(ActionSpecification.getAllRepeatables());
+        ZonedDateTime repeatDate = ZonedDateTime.now();
+        List<Action> repeatableActions = actionRepository.findAll(ActionSpecification.getAllRepeatables(repeatDate));
+        if (repeatableActions.isEmpty())
+            return;
+
         var newActions = repeatableActions.stream()
                 .map(this::getRepeatAction)
                 .toList();
+
         actionRepository.saveAll(newActions);
     }
 
     @Scheduled(cron = "${action.notification.cron}")
     @Transactional
     public void notifyUser() {
-        ZonedDateTime actionDate = ZonedDateTime.now().plusMinutes(minutesBeforeNotification);
+        ZonedDateTime actionDate = ZonedDateTime.now().plusDays(daysBeforeNotification);
         List<Action> actions = actionRepository.findAll(ActionSpecification.getAllNeedNotify(actionDate));
 
         actions.forEach(notificationService::sendNotifications);
@@ -145,7 +155,8 @@ public class ActionService {
 
     @Transactional
     public Action getRepeatAction(Action action) {
-        Period interval = action.getType().getInterval();
+        Duration interval = action.getType().getInterval();
+
         return new Action(
                 null,
                 action.getUserInfo(),
