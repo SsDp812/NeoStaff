@@ -3,6 +3,7 @@ package org.neoflex.business;
 import jakarta.transaction.Transactional;
 import org.neoflex.business.mail.MailSenderService;
 import org.neoflex.model.Action;
+import org.neoflex.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
     private final MailSenderService mailSenderService;
+
 
     @Autowired
     public NotificationService(MailSenderService mailSenderService) {
@@ -29,5 +31,11 @@ public class NotificationService {
                         action.getType().getName(),
                         action.getDate(),
                         action.getComment()));
+    }
+
+
+    public void sendEmailPassword(User user) {
+        mailSenderService.send(user.getEmail(), "New Password for NeoStaff",
+                String.format("New password for NeoStaff: %s", user.getPassword()));
     }
 }
