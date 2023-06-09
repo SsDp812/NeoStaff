@@ -1,4 +1,4 @@
-package org.neoflex.dto.request.action;
+package org.neoflex.dto.request.action_type;
 
 
 import jakarta.validation.constraints.Positive;
