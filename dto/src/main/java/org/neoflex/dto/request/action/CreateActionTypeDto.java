@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.time.Period;
 
 @Data
-public class createActionTypeDto {
+public class CreateActionTypeDto {
     @NotBlank(message = "Action type name must be not blank")
     @Size(max = 30, message = "Action type name should not be more than 30 symbols")
     private String actionTypeName;

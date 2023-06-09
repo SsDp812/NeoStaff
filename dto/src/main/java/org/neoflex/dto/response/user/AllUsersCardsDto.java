@@ -6,6 +6,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class getAllUsersDto {
-    public List<userPreviewCardDto> userPreviewCards;
+public class AllUsersCardsDto {
+    public List<UserPreviewCardDto> userPreviewCards;
 }
