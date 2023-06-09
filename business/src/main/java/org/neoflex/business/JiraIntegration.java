@@ -39,7 +39,6 @@ public class JiraIntegration {
                 .asJson();
 
         for (Object itVar : response.getBody().getArray()) {
-            System.out.println(itVar);
             JSONObject jo = (JSONObject) itVar;
 
             if(!((String) jo.get("accountType")).equals("atlassian") || !((Boolean) jo.get("active"))){
@@ -58,14 +57,8 @@ public class JiraIntegration {
             userInfo.setUser(user);
             userInfo.setName((String) jo.get("displayName"));
             user.setUserInfo(userInfo);
-
-
-
             user.setPassword(genPassword());
 
-            //проверить, что все нормально тянуллось
-
-            //userRepository.save(user);
             userInfoRepository.save(userInfo);
 
             notificationService.sendEmailPassword(user);

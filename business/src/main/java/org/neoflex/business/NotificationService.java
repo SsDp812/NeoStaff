@@ -23,10 +23,6 @@ public class NotificationService {
     public NotificationService(MailSenderService mailSenderService, TelegramService telegramService) {
         this.mailSenderService = mailSenderService;
         this.telegramService = telegramService;
-
-    @Autowired
-    public NotificationService(MailSenderService mailSenderService) {
-        this.mailSenderService = mailSenderService;
     }
 
     @Transactional
