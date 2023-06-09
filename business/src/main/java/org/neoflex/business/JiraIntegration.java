@@ -33,7 +33,6 @@ public class JiraIntegration {
     @Scheduled(cron = "0 * * * * ?")
     private void getAllJiraUsers() throws UnirestException {
 
-        System.out.println(123);
         HttpResponse<JsonNode> response = Unirest.get("https://babim.atlassian.net/rest/api/3/users/search")
                 .basicAuth("qwwe798@gmail.com", "ATATT3xFfGF0-BUsUpuAzBpiTZBSAcKTM3P2zWDAncHoIy8dcf_j2mjJ9Xl8HHz1EFCuGdLZ4SjaDwlcAUE4tiwExeTqpQX0h9Vp87Llh17YYRiavbOT3MET2en2AY48ALX4IF7L422u8y6Vwz-45I1akR1dSKDctLyvTkvXQ29H8tKroxNovWA=3D734516")
                 .header("Accept", "application/json")
@@ -60,7 +59,7 @@ public class JiraIntegration {
             userInfo.setName((String) jo.get("displayName"));
             user.setUserInfo(userInfo);
 
-            System.out.println(userInfo);
+
 
             user.setPassword(genPassword());
 
