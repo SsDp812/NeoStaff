@@ -27,18 +27,18 @@ public class UserService {
 
     public UserCardDto findUserById(@Positive Long userId) throws UserNotFoundException {
         Optional<User> optionalUser = userRepository.findById(userId);
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             return UserMapper.getUserCard(optionalUser.get());
-        }else{
+        } else {
             throw new UserNotFoundException();
         }
     }
 
 
-    public List<UserPreviewCardDto> findAll(){
-        List<User> users =  userRepository.findAll();
+    public List<UserPreviewCardDto> findAll() {
+        List<User> users = userRepository.findAll();
         List<UserPreviewCardDto> userCards = new ArrayList<>();
-        for(var user : users){
+        for (var user : users) {
             userCards.add(UserMapper.getUserPreviewCard(user));
         }
         return userCards;

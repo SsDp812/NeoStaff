@@ -93,7 +93,7 @@ public class ActionService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             List<ActionCardDto> actionCardsDto = new ArrayList<ActionCardDto>();
-            for(var action : user.getUserInfo().getActions()){
+            for (var action : user.getUserInfo().getActions()) {
                 actionCardsDto.add(ActionMapper.getActionCard(action));
             }
             return actionCardsDto;
@@ -104,9 +104,9 @@ public class ActionService {
 
     public ActionCardDto findActionById(@Positive Long actionId) throws ActionNotFound {
         Optional<Action> optionalAction = actionRepository.findById(actionId);
-        if(optionalAction.isPresent()){
+        if (optionalAction.isPresent()) {
             return ActionMapper.getActionCard(optionalAction.get());
-        }else{
+        } else {
             throw new ActionNotFound();
         }
     }

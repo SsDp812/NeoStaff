@@ -23,13 +23,13 @@ public class ActionTypeService {
         this.actionTypeRepository = actionTypeRepository;
     }
 
-    private ActionTypeCardDto createActionType(@Valid CreateActionTypeDto dto){
+    private ActionTypeCardDto createActionType(@Valid CreateActionTypeDto dto) {
         ActionType actionType = new ActionType();
         actionType.setName(dto.getActionTypeName());
         actionType.setInterval(dto.getInterval());
-        if(dto.getIsNotify() != null){
+        if (dto.getIsNotify() != null) {
             actionType.setIsNotify(dto.getIsNotify());
-        }else{
+        } else {
             actionType.setIsNotify(false);
         }
         actionType = actionTypeRepository.save(actionType);
@@ -39,27 +39,27 @@ public class ActionTypeService {
 
     private ActionTypeCardDto updateActionType(@Valid UpdateActionTypeDto dto) throws ActionTypeNotFound {
         Optional<ActionType> optionalActionType = actionTypeRepository.findById(dto.getActionId());
-        if(optionalActionType.isPresent()){
+        if (optionalActionType.isPresent()) {
             ActionType actionType = optionalActionType.get();
             actionType.setName(dto.getName());
             actionType.setInterval(dto.getInterval());
-            if(dto.getIsNotify() != null){
+            if (dto.getIsNotify() != null) {
                 actionType.setIsNotify(dto.getIsNotify());
             }
             actionType = actionTypeRepository.save(actionType);
             return ActionTypeMapper.getActionTypeCard(actionType);
-        }else{
+        } else {
             throw new ActionTypeNotFound();
         }
     }
 
     private ActionTypeCardDto deleteActionType(@Positive Long actionTypeId) throws ActionTypeNotFound {
         Optional<ActionType> optionalActionType = actionTypeRepository.findById(actionTypeId);
-        if(optionalActionType.isPresent()){
+        if (optionalActionType.isPresent()) {
             ActionType actionType = optionalActionType.get();
             actionTypeRepository.delete(actionType);
             return ActionTypeMapper.getActionTypeCard(actionType);
-        }else{
+        } else {
             throw new ActionTypeNotFound();
         }
     }

@@ -16,13 +16,13 @@ public class UserMapper {
         card.setHireDate(user.getUserInfo().getHireDate());
         card.setDepartmentName(user.getUserInfo().getDepartment().getName());
         card.setActionCardsDto(new ArrayList<ActionCardDto>());
-        for(var action : user.getUserInfo().getActions()){
+        for (var action : user.getUserInfo().getActions()) {
             card.getActionCardsDto().add(ActionMapper.getActionCard(action));
         }
         return card;
     }
 
-    public static UserPreviewCardDto getUserPreviewCard(User user){
+    public static UserPreviewCardDto getUserPreviewCard(User user) {
         UserPreviewCardDto card = new UserPreviewCardDto();
         card.setUserId(user.getId());
         card.setEmail(user.getEmail());
