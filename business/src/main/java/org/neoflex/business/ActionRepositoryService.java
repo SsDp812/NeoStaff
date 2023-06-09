@@ -3,6 +3,7 @@ package org.neoflex.business;
 import jakarta.transaction.Transactional;
 import org.neoflex.model.Action;
 import org.neoflex.repository.ActionRepository;
+import org.neoflex.repository.specification.ActionSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,7 +32,7 @@ public class ActionRepositoryService {
     @Scheduled(cron = "${action.repeat.cron}")
     @Transactional
     public void repeatActions() {
-        List<Action> repeatableActions = repository.findAllRepeatables();
+        List<Action> repeatableActions = repository.findAll(ActionSpecification.getAllRepeatables());
         var newActions = repeatableActions.stream()
                 .map(this::getRepeatAction)
                 .toList();
@@ -42,7 +43,7 @@ public class ActionRepositoryService {
     @Transactional
     public void notifyUser() {
         ZonedDateTime actionDate = ZonedDateTime.now().plusMinutes(minutesBeforeNotification);
-        List<Action> actions = repository.findAllNeedNotify(actionDate);
+        List<Action> actions = repository.findAll(ActionSpecification.getAllNeedNotify(actionDate));
 
         actions.forEach(notificationService::sendNotifications);
     }

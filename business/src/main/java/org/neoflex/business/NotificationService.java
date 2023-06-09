@@ -1,7 +1,7 @@
 package org.neoflex.business;
 
 import jakarta.transaction.Transactional;
-import org.neoflex.business.mail.MailSender;
+import org.neoflex.business.mail.MailSenderService;
 import org.neoflex.model.Action;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-    private final MailSender mailSender;
+    private final MailSenderService mailSenderService;
 
     @Autowired
-    public NotificationService(MailSender mailSender) {
-        this.mailSender = mailSender;
+    public NotificationService(MailSenderService mailSenderService) {
+        this.mailSenderService = mailSenderService;
     }
 
     @Transactional
@@ -23,7 +23,7 @@ public class NotificationService {
 
     @Transactional
     public void sendEmailNotification(Action action) {
-        mailSender.send(action.getUserInfo().getUser().getEmail(),
+        mailSenderService.send(action.getUserInfo().getUser().getEmail(),
                 "Action notification",
                 String.format("Action %s starts at %s \nComment: %s",
                         action.getType().getName(),
