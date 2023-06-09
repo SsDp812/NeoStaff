@@ -8,10 +8,9 @@ import org.neoflex.dto.request.user.UpdateActionTimeToUserDto;
 import org.neoflex.dto.response.action_type.ActionTypeCardDto;
 import org.neoflex.model.ActionType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/action_types")
@@ -36,4 +35,10 @@ public class ActionTypeController {
     public ActionTypeCardDto deleteActionType(@RequestBody Long actionId) throws ActionTypeNotFound {
         return actionTypeService.deleteActionType(actionId);
     }
+
+    @GetMapping("/all")
+    public List<ActionTypeCardDto> getAll(){
+        return actionTypeService.getAllActionTypes();
+    }
+
 }

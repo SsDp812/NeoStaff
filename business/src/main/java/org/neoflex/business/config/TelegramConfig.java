@@ -8,9 +8,8 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Data
-@PropertySource("config.properties")
+@PropertySource("telegram.properties")
 public class TelegramConfig {
     @Value("${bot.name}") String botName;
     @Value("${bot.token}") String token;
-    @Value("${bot.chatId}") String chatId;
 }

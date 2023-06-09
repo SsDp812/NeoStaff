@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Positive;
 import org.neoflex.business.ActionService;
 import org.neoflex.common.exceptions.action.ActionNotFound;
 import org.neoflex.common.exceptions.user.UserNotFoundException;
+import org.neoflex.dto.request.action_type.ActionTypeFilterDto;
 import org.neoflex.dto.request.user.AddActionToUserDto;
 import org.neoflex.dto.request.user.DeleteActionToUserDto;
 import org.neoflex.dto.request.user.UpdateActionTimeToUserDto;
@@ -48,4 +49,9 @@ public class ActionController {
         return actionService.deleteActionFromUser(dto);
     }
 
+
+    @PostMapping("/filter")
+    public List<ActionCardDto> getActionByFilter(@RequestBody ActionTypeFilterDto dto){
+        return null;
+    }
 }

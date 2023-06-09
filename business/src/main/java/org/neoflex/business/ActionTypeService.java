@@ -12,6 +12,8 @@ import org.neoflex.repository.ActionTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -62,5 +64,14 @@ public class ActionTypeService {
         } else {
             throw new ActionTypeNotFound();
         }
+    }
+
+    public List<ActionTypeCardDto> getAllActionTypes() {
+        List<ActionType> actionTypes = actionTypeRepository.findAll();
+        List<ActionTypeCardDto> dtos = new ArrayList<>();
+        for (var actionType : actionTypes) {
+            dtos.add(ActionTypeMapper.getActionTypeCard(actionType));
+        }
+        return dtos;
     }
 }
