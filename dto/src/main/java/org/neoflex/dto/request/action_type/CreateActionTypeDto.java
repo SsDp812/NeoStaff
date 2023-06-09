@@ -15,5 +15,5 @@ public class CreateActionTypeDto {
     private String actionTypeName;
     @Positive
     private Period interval;
-    private boolean isNotify;
+    private Boolean isNotify;
 }
