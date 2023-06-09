@@ -150,7 +150,7 @@ public class ActionService {
         ZonedDateTime actionDate = ZonedDateTime.now().plusDays(daysBeforeNotification);
         List<Action> actions = actionRepository.findAll(ActionSpecification.getAllNeedNotify(actionDate));
 
-        actions.forEach(notificationService::sendNotifications);
+        notificationService.sendNotifications(actions);
     }
 
     @Transactional

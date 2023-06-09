@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 
-@Data
 @Setter
 @Getter
 @NoArgsConstructor
@@ -40,4 +40,25 @@ public class UserInfo {
     @OneToMany(mappedBy = "userInfo")
     private List<Action> actions;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserInfo userInfo = (UserInfo) o;
+
+        if (!Objects.equals(id, userInfo.id)) return false;
+        if (!Objects.equals(name, userInfo.name)) return false;
+        if (!Objects.equals(hireDate, userInfo.hireDate)) return false;
+        return Objects.equals(isDeleted, userInfo.isDeleted);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (hireDate != null ? hireDate.hashCode() : 0);
+        result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
+        return result;
+    }
 }
