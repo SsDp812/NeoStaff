@@ -10,30 +10,33 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class ActionSpecification {
-    public static Specification<Action> getAllRepeatables() {
+    public static Specification<Action> getAllRepeatables(ZonedDateTime dateTime) {
         return (root, query, cb) -> {
             Join<Action, ActionType> joinActionType = root.join("type");
 
-            ZonedDateTime startDay = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+            ZonedDateTime startDay = dateTime.truncatedTo(ChronoUnit.DAYS);
             ZonedDateTime startNextDay = startDay.plusDays(1);
 
-            Predicate intervalNotNull = cb.isNotNull(joinActionType.get("interval"));
+            Predicate isNeedRepeat = cb.isNotNull(joinActionType.get("interval"));
             Predicate isNotDeleted = cb.equal(root.get("isDeleted"), false);
-            Predicate isNeedRepeatNow = cb.between(root.get("date"), startDay, startNextDay);
+            Predicate isDateToday = cb.between(root.get("date"), startDay, startNextDay);
 
-            return query.where(cb.and(intervalNotNull, isNotDeleted, isNeedRepeatNow))
+            return query.where(cb.and(isNeedRepeat, isNotDeleted, isDateToday))
                     .getRestriction();
         };
     }
     public static Specification<Action> getAllNeedNotify(ZonedDateTime dateTime) {
         return (root, query, cb) -> {
-            Join<Action, ActionType> joinActionType = root.join("action_type");
+            Join<Action, ActionType> joinActionType = root.join("type");
+
+            ZonedDateTime startDay = dateTime.truncatedTo(ChronoUnit.DAYS);
+            ZonedDateTime startNextDay = startDay.plusDays(1);
 
             Predicate isNeedNotify = cb.equal(joinActionType.get("isNotify"), true);
             Predicate isNotDeleted = cb.equal(root.get("isDeleted"), false);
-            Predicate isNeedNotificationNow = cb.lessThanOrEqualTo(root.get("date"), dateTime);
+            Predicate isThatDate = cb.between(root.get("date"), startDay, startNextDay);
 
-            return query.where(cb.and(isNeedNotify, isNotDeleted, isNeedNotificationNow))
+            return query.where(cb.and(isNeedNotify, isNotDeleted, isThatDate))
                     .getRestriction();
         };
     }

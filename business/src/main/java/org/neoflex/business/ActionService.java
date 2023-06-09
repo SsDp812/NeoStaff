@@ -38,8 +38,8 @@ public class ActionService {
 
     private final NotificationService notificationService;
 
-    @Value("${action.minutesBeforeNotification}")
-    private long minutesBeforeNotification;
+    @Value("${action.daysBeforeNotification}")
+    private long daysBeforeNotification;
 
     @Autowired
     public ActionService(ActionRepository actionRepository, UserRepository userRepository, NotificationService notificationService) {
@@ -133,7 +133,7 @@ public class ActionService {
     @Transactional
     public void repeatActions() {
         ZonedDateTime repeatDate = ZonedDateTime.now();
-        List<Action> repeatableActions = actionRepository.findAll(ActionSpecification.getAllRepeatables());
+        List<Action> repeatableActions = actionRepository.findAll(ActionSpecification.getAllRepeatables(repeatDate));
         if (repeatableActions.isEmpty())
             return;
 
@@ -147,7 +147,7 @@ public class ActionService {
     @Scheduled(cron = "${action.notification.cron}")
     @Transactional
     public void notifyUser() {
-        ZonedDateTime actionDate = ZonedDateTime.now().plusMinutes(minutesBeforeNotification);
+        ZonedDateTime actionDate = ZonedDateTime.now().plusDays(daysBeforeNotification);
         List<Action> actions = actionRepository.findAll(ActionSpecification.getAllNeedNotify(actionDate));
 
         actions.forEach(notificationService::sendNotifications);
@@ -156,14 +156,13 @@ public class ActionService {
     @Transactional
     public Action getRepeatAction(Action action) {
         Duration interval = action.getType().getInterval();
-        var newAction = new Action(
+
+        return new Action(
                 null,
                 action.getUserInfo(),
                 action.getType(),
                 ZonedDateTime.from(interval.addTo(action.getDate())),
                 action.getComment(),
                 false);
-
-        return newAction;
     }
 }
