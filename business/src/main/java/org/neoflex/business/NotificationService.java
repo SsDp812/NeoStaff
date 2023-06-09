@@ -28,6 +28,7 @@ public class NotificationService {
     @Transactional
     public void sendNotifications(Action action) {
         sendEmailNotification(action);
+        sendActionToTelegram(action);
     }
 
     @Transactional
@@ -38,7 +39,9 @@ public class NotificationService {
                         action.getType().getName(),
                         action.getDate(),
                         action.getComment()));
-
+    }
+    @Transactional
+    public void sendActionToTelegram(Action action){
         telegramService.send(
                 action.getUserInfo().getUser(),
                 String.format("Action %s starts at %s \nComment: %s",
@@ -48,7 +51,6 @@ public class NotificationService {
         );
 
     }
-
 
     public void sendEmailPassword(User user) {
         mailSenderService.send(user.getEmail(), "New Password for NeoStaff",

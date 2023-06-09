@@ -58,7 +58,7 @@ public class TelegramService extends TelegramLongPollingBot {
         }
     }
 
-    private void checkAndAddEmail(Long chatId, String msg){
+    private void checkAndAddEmail(Long chatId,@Email String msg){
         Optional<User> optionalUser = userRepository.findByEmail(msg);
         System.out.println(msg);
         SendMessage message = new SendMessage();

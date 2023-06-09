@@ -27,6 +27,9 @@ public class User {
     @Column(name = "jira_account_id")
     private String jiraAccountId;
 
+    @Column(name = "telegram_id")
+    private Long chatId;
+
     @OneToOne(mappedBy = "user")
     private UserInfo userInfo;
 
