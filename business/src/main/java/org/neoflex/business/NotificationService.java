@@ -7,6 +7,7 @@ import org.neoflex.business.telegram.TelegramService;
 
 
 import org.neoflex.model.Action;
+import org.neoflex.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,13 @@ public class NotificationService {
 
     private final MailSenderService mailSenderService;
 
+
     private final TelegramService telegramService;
 
     @Autowired
     public NotificationService(MailSenderService mailSenderService, TelegramService telegramService) {
         this.mailSenderService = mailSenderService;
         this.telegramService = telegramService;
-
 
     @Autowired
     public NotificationService(MailSenderService mailSenderService) {
@@ -50,5 +51,11 @@ public class NotificationService {
                         action.getComment())
         );
 
+    }
+
+
+    public void sendEmailPassword(User user) {
+        mailSenderService.send(user.getEmail(), "New Password for NeoStaff",
+                String.format("New password for NeoStaff: %s", user.getPassword()));
     }
 }
