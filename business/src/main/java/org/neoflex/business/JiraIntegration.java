@@ -23,7 +23,7 @@ public class JiraIntegration {
 
 
         HttpResponse<JsonNode> response = Unirest.get("https://babim.atlassian.net/rest/api/3/users/search")
-                .basicAuth("qwwe798@gmail.com", "ATATT3xFfGF0WRB2obXRji76g6-xpRlNqQf4dQQW-tPCXy6Rble5jGiXCumj6cYQhLjlKdr2wqGytupyZf1AwWNJsR1PCi1I0wvekXnjgQ7RhTt5QKxuyIq7KzTxeevb8M7FMOSZau9TxK1SVs-qG1A-tu3nXgccY-3MuMvlO2dBAlCyx82KjSQ=76863B02")
+                .basicAuth("qwwe798@gmail.com", "ATATT3xFfGF0e20EWJuEdvsMOFG9qsHCdSnzgttsguqotvlK_ZBvUwGLr9ZrlfdIf1AR3RroNUlUhF7FakWra09XfPanbIKRC4qopBUFIwS5UCWsaorXmZQdDqQzkbJ7LoFBfn9f7Kj40GmR7tE0oFLU2zywubU_vhingm39_JpDWdAQU-rg8Rc=19398EF3")
                 .header("Accept", "application/json")
                 .asJson();
 
@@ -32,6 +32,9 @@ public class JiraIntegration {
 
             System.out.println(itVar);
             JSONObject jo = (JSONObject) itVar;
+
+            System.out.println(jo);
+
             if(!((String) jo.get("accountType")).equals("atlassian") || !((Boolean) jo.get("active"))){
                 continue;
             }
@@ -41,7 +44,7 @@ public class JiraIntegration {
 
             UserInfo userInfo = new UserInfo();
             userInfo.setUser(user);
-            userInfo.setName((String) jo.get("emailAddress"));
+            userInfo.setName((String) jo.get("displayName"));
             user.setUserInfo(userInfo);
 
             System.out.println(userInfo);
