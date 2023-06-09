@@ -23,7 +23,7 @@ public class ActionTypeService {
         this.actionTypeRepository = actionTypeRepository;
     }
 
-    private ActionTypeCardDto createActionType(@Valid CreateActionTypeDto dto) {
+    public ActionTypeCardDto createActionType(@Valid CreateActionTypeDto dto) {
         ActionType actionType = new ActionType();
         actionType.setName(dto.getActionTypeName());
         actionType.setInterval(dto.getInterval());
@@ -37,7 +37,7 @@ public class ActionTypeService {
     }
 
 
-    private ActionTypeCardDto updateActionType(@Valid UpdateActionTypeDto dto) throws ActionTypeNotFound {
+    public ActionTypeCardDto updateActionType(@Valid UpdateActionTypeDto dto) throws ActionTypeNotFound {
         Optional<ActionType> optionalActionType = actionTypeRepository.findById(dto.getActionId());
         if (optionalActionType.isPresent()) {
             ActionType actionType = optionalActionType.get();
@@ -53,7 +53,7 @@ public class ActionTypeService {
         }
     }
 
-    private ActionTypeCardDto deleteActionType(@Positive Long actionTypeId) throws ActionTypeNotFound {
+    public ActionTypeCardDto deleteActionType(@Positive Long actionTypeId) throws ActionTypeNotFound {
         Optional<ActionType> optionalActionType = actionTypeRepository.findById(actionTypeId);
         if (optionalActionType.isPresent()) {
             ActionType actionType = optionalActionType.get();
