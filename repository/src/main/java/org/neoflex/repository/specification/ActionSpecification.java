@@ -7,22 +7,27 @@ import org.neoflex.model.ActionType;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class ActionSpecification {
     public static Specification<Action> getAllRepeatables() {
         return (root, query, cb) -> {
-            Join<Action, ActionType> joinActionType = root.join("actionType");
+            Join<Action, ActionType> joinActionType = root.join("type");
+
+            ZonedDateTime startDay = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+            ZonedDateTime startNextDay = startDay.plusDays(1);
 
             Predicate intervalNotNull = cb.isNotNull(joinActionType.get("interval"));
             Predicate isNotDeleted = cb.equal(root.get("isDeleted"), false);
+            Predicate isNeedRepeatNow = cb.between(root.get("date"), startDay, startNextDay);
 
-            return query.where(cb.and(intervalNotNull, isNotDeleted))
+            return query.where(cb.and(intervalNotNull, isNotDeleted, isNeedRepeatNow))
                     .getRestriction();
         };
     }
     public static Specification<Action> getAllNeedNotify(ZonedDateTime dateTime) {
         return (root, query, cb) -> {
-            Join<Action, ActionType> joinActionType = root.join("actionType");
+            Join<Action, ActionType> joinActionType = root.join("action_type");
 
             Predicate isNeedNotify = cb.equal(joinActionType.get("isNotify"), true);
             Predicate isNotDeleted = cb.equal(root.get("isDeleted"), false);

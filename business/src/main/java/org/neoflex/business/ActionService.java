@@ -11,8 +11,11 @@ import org.neoflex.dto.request.user.DeleteActionToUserDto;
 import org.neoflex.dto.request.user.UpdateActionTimeToUserDto;
 import org.neoflex.dto.response.action.ActionCardDto;
 import org.neoflex.model.Action;
+import org.neoflex.model.ActionType;
 import org.neoflex.model.User;
 import org.neoflex.repository.ActionRepository;
+import org.neoflex.repository.ActionTypeRepository;
+import org.neoflex.repository.UserInfoRepository;
 import org.neoflex.repository.UserRepository;
 import org.neoflex.repository.specification.ActionSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ import java.util.Optional;
 @Service
 public class ActionService {
     private final ActionRepository actionRepository;
+
     private final UserRepository userRepository;
 
     private final NotificationService notificationService;
@@ -127,10 +132,15 @@ public class ActionService {
     @Scheduled(cron = "${action.repeat.cron}")
     @Transactional
     public void repeatActions() {
+        ZonedDateTime repeatDate = ZonedDateTime.now();
         List<Action> repeatableActions = actionRepository.findAll(ActionSpecification.getAllRepeatables());
+        if (repeatableActions.isEmpty())
+            return;
+
         var newActions = repeatableActions.stream()
                 .map(this::getRepeatAction)
                 .toList();
+
         actionRepository.saveAll(newActions);
     }
 
@@ -145,13 +155,15 @@ public class ActionService {
 
     @Transactional
     public Action getRepeatAction(Action action) {
-        Period interval = action.getType().getInterval();
-        return new Action(
+        Duration interval = action.getType().getInterval();
+        var newAction = new Action(
                 null,
                 action.getUserInfo(),
                 action.getType(),
                 ZonedDateTime.from(interval.addTo(action.getDate())),
                 action.getComment(),
                 false);
+
+        return newAction;
     }
 }

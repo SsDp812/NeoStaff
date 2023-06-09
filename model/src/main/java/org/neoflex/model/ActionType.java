@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.Interval;
 import org.hibernate.annotations.CollectionId;
+import org.neoflex.model.converter.DurationConverter;
 
+import java.time.Duration;
 import java.time.Period;
 
 @Data
@@ -23,7 +26,8 @@ public class ActionType {
     private String name;
 
     @Column(name = "interval")
-    private Period interval;
+    @Convert(converter = DurationConverter.class)
+    private Duration interval;
 
     @Column(name = "is_notify")
     private Boolean isNotify;
