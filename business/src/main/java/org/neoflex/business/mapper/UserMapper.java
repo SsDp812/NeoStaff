@@ -14,7 +14,7 @@ public class UserMapper {
         card.setName(user.getUserInfo().getName());
         card.setEmail(user.getEmail());
         card.setHireDate(user.getUserInfo().getHireDate());
-        card.setDepartmentName(user.getUserInfo().getDepartment().getName());
+        //card.setDepartmentName(user.getUserInfo().getDepartment().getName());
         card.setActionCardsDto(new ArrayList<ActionCardDto>());
         for (var action : user.getUserInfo().getActions()) {
             card.getActionCardsDto().add(ActionMapper.getActionCard(action));
@@ -27,7 +27,7 @@ public class UserMapper {
         card.setUserId(user.getId());
         card.setEmail(user.getEmail());
         card.setUserName(user.getUserInfo().getName());
-        card.setDepartmentName(user.getUserInfo().getDepartment().getName());
+        //card.setDepartmentName(user.getUserInfo().getDepartment().getName());
         return card;
     }
 }
