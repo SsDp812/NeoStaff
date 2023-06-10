@@ -1,9 +1,7 @@
 package org.neoflex.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.antlr.v4.runtime.misc.Interval;
 import org.hibernate.annotations.CollectionId;
 import org.neoflex.model.converter.DurationConverter;
@@ -14,6 +12,8 @@ import java.time.Period;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "action_types")
 public class ActionType {

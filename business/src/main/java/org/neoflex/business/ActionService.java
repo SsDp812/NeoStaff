@@ -13,9 +13,9 @@ import org.neoflex.dto.response.action.ActionCardDto;
 import org.neoflex.model.Action;
 import org.neoflex.model.ActionType;
 import org.neoflex.model.User;
+import org.neoflex.model.UserInfo;
 import org.neoflex.repository.ActionRepository;
 import org.neoflex.repository.ActionTypeRepository;
-import org.neoflex.repository.UserInfoRepository;
 import org.neoflex.repository.UserRepository;
 import org.neoflex.repository.specification.ActionSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +37,19 @@ public class ActionService {
 
     private final NotificationService notificationService;
 
+    private final ActionTypeRepository actionTypeRepository;
+
+
+
     @Value("${action.daysBeforeNotification}")
     private long daysBeforeNotification;
 
     @Autowired
-    public ActionService(ActionRepository actionRepository, UserRepository userRepository, NotificationService notificationService) {
+    public ActionService(ActionRepository actionRepository, UserRepository userRepository, NotificationService notificationService, ActionTypeRepository actionTypeRepository) {
         this.actionRepository = actionRepository;
         this.userRepository = userRepository;
         this.notificationService = notificationService;
+        this.actionTypeRepository = actionTypeRepository;
     }
 
     public ActionCardDto addActionToUser(@Valid AddActionToUserDto dto) throws UserNotFoundException {
@@ -165,4 +169,23 @@ public class ActionService {
                 action.getComment(),
                 false);
     }
+
+    @Transactional
+    public void createActionsForNewUser(User user){
+        UserInfo userInfo = user.getUserInfo();
+
+        List<ActionType> actionTypes = actionTypeRepository.findByIntervalIsNotNull();
+
+        for(ActionType type : actionTypes){
+            Action action = new Action();
+            action.setUserInfo(userInfo);
+            action.setType(type);
+            action.setDate(ZonedDateTime.now().plusDays(daysBeforeNotification));
+
+            actionRepository.save(action);
+        }
+
+
+    }
+
 }

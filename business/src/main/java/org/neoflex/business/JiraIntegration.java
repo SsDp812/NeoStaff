@@ -22,11 +22,13 @@ public class JiraIntegration {
     private final UserRepository userRepository;
     private final NotificationService notificationService;
     private final UserInfoRepository userInfoRepository;
+    private final ActionService actionService;
 
-    public JiraIntegration(UserRepository userRepository, NotificationService notificationService, UserInfoRepository userInfoRepository) {
+    public JiraIntegration(UserRepository userRepository, NotificationService notificationService, UserInfoRepository userInfoRepository, ActionService actionService) {
         this.userRepository = userRepository;
         this.notificationService = notificationService;
         this.userInfoRepository = userInfoRepository;
+        this.actionService = actionService;
     }
 
 
@@ -34,7 +36,7 @@ public class JiraIntegration {
     private void getAllJiraUsers() throws UnirestException {
 
         HttpResponse<JsonNode> response = Unirest.get("https://babim.atlassian.net/rest/api/3/users/search")
-                .basicAuth("qwwe798@gmail.com", "ATATT3xFfGF0-BUsUpuAzBpiTZBSAcKTM3P2zWDAncHoIy8dcf_j2mjJ9Xl8HHz1EFCuGdLZ4SjaDwlcAUE4tiwExeTqpQX0h9Vp87Llh17YYRiavbOT3MET2en2AY48ALX4IF7L422u8y6Vwz-45I1akR1dSKDctLyvTkvXQ29H8tKroxNovWA=3D734516")
+                .basicAuth("qwwe798@gmail.com", "ATATT3xFfGF0IB-1lnbEtbNqyqkvavqaeGdOfCDWY0DKo5wQwTT0XYW_cXM-RbhKLyx0a67WmySzkyMN_atJU_eZQhPNO5jz2UqKp1qJLKLzA0e-9amfjcVC9dZtsMUfo7jE0vhXDy-YeW5SEMiOhSUYzSrOu7zfT8KC1C5TSLuT1K2WzMpznac=F2FA5AC6")
                 .header("Accept", "application/json")
                 .asJson();
 
@@ -60,6 +62,9 @@ public class JiraIntegration {
             user.setPassword(genPassword());
 
             userInfoRepository.save(userInfo);
+
+            actionService.createActionsForNewUser(user);
+
 
             notificationService.sendEmailPassword(user);
 
